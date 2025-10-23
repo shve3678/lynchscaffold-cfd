@@ -1,0 +1,76 @@
+#!/bin/sh
+
+#SBATCH --partition=amilan
+#SBATCH --job-name=scaffold
+#SBATCH --output=example-job.%j.out
+#SBATCH --time=06:00:00
+#SBATCH --qos=normal
+#SBATCH --nodes=2
+#SBATCH --ntasks=128
+
+#SBATCH --mail-type=END
+#SBATCH --mail-user=brha0386@colorado.edu
+#SBATCH --account=ucb283_asc1
+
+ml purge
+ml gcc/11.2.0 #needed for openmpi/4.1.1
+#ml aocc/3.2.0 #needed to load openmpi 4.1.4
+ml openmpi/4.1.1 #4.1.1
+ml ucx/1.10.1
+ml paraview/5.9.0
+ml qt/5.9.1
+ml perl/5.36.0
+source /projects/brha0386/software/openfoam/v10/OpenFOAM-10/etc/bashrc
+export SLURM_EXPORT_ENV=ALL
+
+#cd ${0%/*} || exit 1    # Run from this directory
+
+# Notes
+# 1. To turn a file to an executable, do chmod +x <filename>
+# 2. --partition=shas-testing limited to 0.5 hrs and 24 cores
+# 3. need to provide enough memory for blockMesh to run and not fail
+# sinteractive --nodes=1 --ntasks=24 --partition=shas-testing --time=00:30:00
+# sbatch <your-job-script>
+
+#---------------------------------------------
+
+# Source tutorial run functions
+. /projects/brha0386/software/openfoam/v10/OpenFOAM-10/bin/tools/RunFunctions	     # Tutorial run functions
+. /projects/brha0386/software/openfoam/v10/OpenFOAM-10/bin/tools/CleanFunctions      # Tutorial clean functions
+
+# ----------- Clean Case -------------
+
+cleanVoFCase
+cleanCase
+foamListTimes -rm
+
+rm -r 0
+cp -r 0.orig 0
+rm -r processor*
+rm -r log.*
+rm -r postProcessing
+
+touch foam.foam
+
+# Renumber for speed, decompose for parallel computing, run case
+runApplication -a blockMesh
+decomposePar -force
+runParallel -a snappyHexMesh -overwrite
+reconstructParMesh -constant
+renumberMesh -overwrite
+
+decomposePar -force
+runParallel -a simpleFoam
+#reconstructPar # in case getting data out is easier not in decomposed format from parallel computing
+
+runParallel -a simpleFoam -postProcess -func wallShearStress #need to reconstruct before doing the post-process
+
+
+
+
+
+
+
+
+
+#------------------------------------------------------------------------------

@@ -1,0 +1,37 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : blockMesh
+Date   : Aug 07 2023
+Time   : 19:35:24
+Host   : shreyavenkatesh
+PID    : 527
+I/O    : uncollated
+Case   : /home/shreyavenkatesh/Lynch_Lab_Scaffold_STL_Steady_15
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+
+--> FOAM FATAL IO ERROR: (openfoam-2012)
+Entry 'version' not found in dictionary "/home/shreyavenkatesh/Lynch_Lab_Scaffold_STL_Steady_15/system/blockMeshDict"
+
+
+file: /home/shreyavenkatesh/Lynch_Lab_Scaffold_STL_Steady_15/system/blockMeshDict at line 10 to 12.
+
+    From bool Foam::dictionary::readEntry(const Foam::word&, T&, Foam::keyType::option, bool) const [with T = Foam::token]
+    in file lnInclude/dictionaryTemplates.C at line 334.
+
+FOAM exiting
+

@@ -1,0 +1,36 @@
+#!/bin/sh
+#cd "${0%/*}" || exit                                # Run from this directory
+#. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions	     # Tutorial run functions
+. ${WM_PROJECT_DIR:?}/bin/tools/CleanFunctions      # Tutorial clean functions
+
+#------------------------------------------------------------------------------
+
+cleanVoFCase
+cleanCase
+foamListTimes -rm
+
+rm -r 0
+cp -r 0.orig 0
+rm -r processor*
+rm -r log.*
+rm -r postProcessing
+
+touch foam.foam
+
+# Renumber for speed, decompose for parallel computing, run case
+runApplication -a blockMesh
+decomposePar -force
+runParallel -a snappyHexMesh -overwrite
+reconstructParMesh -constant
+renumberMesh -overwrite
+
+decomposePar -force
+runParallel -a simpleFoam
+reconstructPar # in case getting data out is easier not in decomposed format from parallel computing
+
+runParallel -a simpleFoam -postProcess -func wallShearStress #need to reconstruct before doing the post-process
+
+
+#------------------------------------------------------------------------------

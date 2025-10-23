@@ -9,8 +9,8 @@
 #SBATCH --ntasks=128
 
 #SBATCH --mail-type=END
-#SBATCH --mail-user=brha0386@colorado.edu
-#SBATCH --account=ucb283_asc1
+#SBATCH --mail-user=shve3678@colorado.edu
+#SBATCH --account=ucb-general
 
 ml purge
 ml gcc/11.2.0 #needed for openmpi/4.1.1
@@ -20,7 +20,7 @@ ml ucx/1.10.1
 ml paraview/5.9.0
 ml qt/5.9.1
 ml perl/5.36.0
-source /projects/brha0386/software/openfoam/v10/OpenFOAM-10/etc/bashrc
+source /projects/shve3678/software/openfoam/v10/OpenFOAM-10/etc/bashrc
 export SLURM_EXPORT_ENV=ALL
 
 #cd ${0%/*} || exit 1    # Run from this directory
@@ -35,8 +35,8 @@ export SLURM_EXPORT_ENV=ALL
 #---------------------------------------------
 
 # Source tutorial run functions
-. /projects/brha0386/software/openfoam/v10/OpenFOAM-10/bin/tools/RunFunctions	     # Tutorial run functions
-. /projects/brha0386/software/openfoam/v10/OpenFOAM-10/bin/tools/CleanFunctions      # Tutorial clean functions
+. /projects/shve3678/software/openfoam/v10/OpenFOAM-10/bin/tools/RunFunctions	     # Tutorial run functions
+. /projects/shve3678/software/openfoam/v10/OpenFOAM-10/bin/tools/CleanFunctions      # Tutorial clean functions
 
 # ----------- Clean Case -------------
 
